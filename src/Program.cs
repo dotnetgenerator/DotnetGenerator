@@ -6,7 +6,7 @@ namespace dgen
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            Console.WriteLine(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name);
         }
     }
 }
