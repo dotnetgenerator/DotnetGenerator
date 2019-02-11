@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.IO.Abstractions;
 using System.Reflection;
 using System.Threading.Tasks;
+using dgen.Generators;
 using dgen.Services;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +20,7 @@ namespace dgen
         private readonly IFileSystem _fileSystem;
         private readonly IReporter _reporter;
         private readonly IProjectDiscoveryService _projectDiscoveryService;
+        private readonly IGenerator _generator;
 
         [Argument(0, Description = "Describes what to generate c/class for example...")]
         [Required]
@@ -35,6 +37,7 @@ namespace dgen
                 .AddSingleton<IReporter>(provider => new ConsoleReporter(provider.GetService<IConsole>()))
                 .AddSingleton<IFileSystem, FileSystem>()
                 .AddSingleton<IProjectDiscoveryService, ProjectDiscoveryService>()
+                .AddSingleton<IGenerator, BaseGenerator>()
                 .BuildServiceProvider())
             {
 
@@ -50,11 +53,15 @@ namespace dgen
             //Console.WriteLine(System.Reflection.Assembly.GetExecutingAssembly().GetName().Name);
         }
 
-        public Program(IFileSystem fileSystem, IReporter reporter, IProjectDiscoveryService projectDiscoveryService)
+        public Program(IFileSystem fileSystem,
+                    IReporter reporter,
+                    IProjectDiscoveryService projectDiscoveryService,
+                    IGenerator generator)
         {
             _fileSystem = fileSystem;
             _reporter = reporter;
             _projectDiscoveryService = projectDiscoveryService;
+            _generator = generator;
         }
 
         public async Task<int> OnExecute(CommandLineApplication app, IConsole console){
@@ -71,7 +78,7 @@ namespace dgen
                 //     return 0;
                 // }
 
-
+                _generator.GenerateFile(Name);
 
                 return 0;
             }

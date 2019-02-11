@@ -11,20 +11,17 @@ namespace dgen.Generators
     public class BaseGenerator : IGenerator
     {
         private readonly IProjectDiscoveryService _projectDiscoveryService;
-        private readonly IFileSystem _fileSystem;
         private readonly IReporter _reporter;
         private string currentPath;
         private ProjectDiscoveryResult projectDiscovery;
 
-        public BaseGenerator(IProjectDiscoveryService projectDiscoveryService, IFileSystem fileSystem, IReporter reporter)
+        public BaseGenerator(IProjectDiscoveryService projectDiscoveryService, IReporter reporter)
         {
             _projectDiscoveryService = projectDiscoveryService;
-            _fileSystem = fileSystem;
             _reporter = reporter;
         }
 
         public virtual void GenerateFile(string name){
-            currentPath = _fileSystem.Directory.GetCurrentDirectory();
             projectDiscovery = _projectDiscoveryService.DiscoverProject("path");
             buildNamespace(name);
         }

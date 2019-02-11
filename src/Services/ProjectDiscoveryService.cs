@@ -17,11 +17,11 @@ namespace dgen.Services {
             _fileSystem = fileSystem;
         }
 
-        public ProjectDiscoveryResult DiscoverProject(string path)
+        public ProjectDiscoveryResult DiscoverProject(string path = "")
         {
             var csproj = findSln(path);
-            var newPath = path;
-            var list = new List<string>{ path };
+            var newPath = !string.IsNullOrEmpty(path) ? path : _fileSystem.Directory.GetCurrentDirectory();
+            var list = new List<string>{ newPath };
 
             while(String.IsNullOrEmpty(csproj)){
                 //Im Parent Folder suchen
@@ -38,7 +38,7 @@ namespace dgen.Services {
 
         private string findSln(string path){
             var csprojs = _fileSystem.Directory.GetFiles(path, "*.csproj");
-            
+
             if (csprojs.Length == 1) return _fileSystem.Path.GetFullPath(csprojs[0]);
             if (csprojs.Length > 1) throw new CommandValidationException($"Es gibt mehrere *.csproj Dateien in diesem Ordner {path}!");
             return "";
