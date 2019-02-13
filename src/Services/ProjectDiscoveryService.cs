@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Abstractions;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using dgen.Exceptions;
 using dgen.Models;
 
+[assembly: InternalsVisibleTo("test")]
 namespace dgen.Services {
 
     public class ProjectDiscoveryService : IProjectDiscoveryService {
@@ -19,8 +21,9 @@ namespace dgen.Services {
 
         public ProjectDiscoveryResult DiscoverProject(string path = "")
         {
-            var csproj = findSln(path);
+
             var newPath = !string.IsNullOrEmpty(path) ? path : _fileSystem.Directory.GetCurrentDirectory();
+            var csproj = findSln(newPath);
             var list = new List<string>{ newPath };
 
             while(String.IsNullOrEmpty(csproj)){
@@ -32,19 +35,21 @@ namespace dgen.Services {
                 list.Add(newPath);
             }
 
-            var rootNamespace = csproj.Split('.').First();
+            var fi = _fileSystem.FileInfo.FromFileName(csproj);
+            var rootNamespace = fi.Name.Split('.').First();
             return new ProjectDiscoveryResult { Paths = list, RootNamespace = rootNamespace, ProjPath = csproj };
         }
 
-        private string findSln(string path){
+        internal protected string findSln(string path){
             var csprojs = _fileSystem.Directory.GetFiles(path, "*.csproj");
 
             if (csprojs.Length == 1) return _fileSystem.Path.GetFullPath(csprojs[0]);
+
             if (csprojs.Length > 1) throw new CommandValidationException($"Es gibt mehrere *.csproj Dateien in diesem Ordner {path}!");
             return "";
         }
 
-        private bool isRoot(string current){
+        internal protected bool isRoot(string current){
             var root = _fileSystem.Directory.GetDirectoryRoot(current);
             return root == current ? true : false;
         }

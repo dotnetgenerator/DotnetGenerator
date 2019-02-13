@@ -2,12 +2,14 @@
 using System.ComponentModel.DataAnnotations;
 using System.IO.Abstractions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using dgen.Generators;
 using dgen.Services;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 
+[assembly: InternalsVisibleTo("test")]
 namespace dgen
 {
 
@@ -78,7 +80,7 @@ namespace dgen
                 //     return 0;
                 // }
 
-                _generator.GenerateFile(Name);
+                _generator.GenerateFile(GeneratorType.CLASS, Name);
 
                 return 0;
             }

@@ -6,6 +6,6 @@ namespace dgen.Services {
 
     public interface IProjectDiscoveryService
     {
-        ProjectDiscoveryResult DiscoverProject(string path);
+        ProjectDiscoveryResult DiscoverProject(string path = "");
     }
 }

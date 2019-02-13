@@ -9,9 +9,11 @@ namespace test.mocks {
     public class DirectoryBaseMock : DirectoryBase
     {
         private readonly IFileSystem _fileSystem;
+        private string _currentDirectory;
 
-        public DirectoryBaseMock(IFileSystem fileSystem): base(fileSystem) {
+        public DirectoryBaseMock(IFileSystem fileSystem, string currentDirectory): base(fileSystem) {
             _fileSystem = fileSystem;
+            _currentDirectory = currentDirectory;
         }
 
         public override DirectoryInfoBase CreateDirectory(string path)
@@ -101,7 +103,7 @@ namespace test.mocks {
 
         public override string GetCurrentDirectory()
         {
-            throw new NotImplementedException();
+            return _currentDirectory;
         }
 
         public override string[] GetDirectories(string path)

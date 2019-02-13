@@ -4,9 +4,15 @@ namespace test.mocks {
 
     public class FileSystemMock : IFileSystem
     {
+        private string _currentDirectory;
+
+        public FileSystemMock(string currentDirectory)
+        {
+            _currentDirectory = currentDirectory;
+        }
         public FileBase File => throw new System.NotImplementedException();
 
-        public DirectoryBase Directory => new DirectoryBaseMock(this);
+        public DirectoryBase Directory => new DirectoryBaseMock(this, _currentDirectory);
 
         public IFileInfoFactory FileInfo => throw new System.NotImplementedException();
 
