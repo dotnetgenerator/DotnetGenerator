@@ -1,6 +1,8 @@
 
+using System.Runtime.CompilerServices;
 using dgen.Models;
 
+[assembly: InternalsVisibleTo("test")]
 namespace dgen.Generators {
 
     public class ClassGenerator : ITypeGenerator{
@@ -16,16 +18,20 @@ namespace dgen.Generators {
             return res;
         }
 
-        private string createContent(string ns, string name){
+        internal protected string createContent(string ns, string name){
             var content = string.Empty;
 
             content += System.Environment.NewLine;
             content += $"namespace {ns}";
             content += System.Environment.NewLine;
             content += "{";
+            content += System.Environment.NewLine;
             content += $"\tpublic class {name}";
+            content += System.Environment.NewLine;
             content += "\t{";
+            content += System.Environment.NewLine;
             content += "\t}";
+            content += System.Environment.NewLine;
             content += "}";
 
             return content;

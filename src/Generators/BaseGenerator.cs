@@ -22,14 +22,16 @@ namespace dgen.Generators
     {
         private readonly IProjectDiscoveryService _projectDiscoveryService;
         private readonly IReporter _reporter;
+        private readonly IFileSystem _fileSystem;
         private string currentPath;
         private ProjectDiscoveryResult projectDiscovery;
 
-        public BaseGenerator(IProjectDiscoveryService projectDiscoveryService, IReporter reporter)
+        public BaseGenerator(IFileSystem fileSystem, IProjectDiscoveryService projectDiscoveryService, IReporter reporter)
         {
             _projectDiscoveryService = projectDiscoveryService;
             projectDiscovery = _projectDiscoveryService.DiscoverProject();
             _reporter = reporter;
+            _fileSystem = fileSystem;
         }
 
         public void GenerateFile(GeneratorType genType, string name)
@@ -42,6 +44,8 @@ namespace dgen.Generators
 
             var generator = getTypedGenerator(genType);
             var res = generator.Generate(ns, fname);
+
+            generateFolders(path);
         }
 
         internal protected string buildNamespace(string name)
@@ -140,9 +144,16 @@ namespace dgen.Generators
         }
 
         internal protected ITypeGenerator getTypedGenerator(GeneratorType type){
-            var qualifiedName = $"dgen.Generators.{type.ToString().FirstCharToUpper()}";
+            var qualifiedName = $"dgen.Generators.{type.ToString().FirstCharToUpper()}Generator";
             var t = Type.GetType(qualifiedName);
             return (ITypeGenerator)Activator.CreateInstance(t);
+        }
+
+        internal protected void generateFolders(string path){
+            if(!_fileSystem.Directory.Exists(path))
+            {
+                _fileSystem.Directory.CreateDirectory(path);
+            }
         }
     }
 }

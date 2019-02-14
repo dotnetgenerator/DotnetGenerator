@@ -25,7 +25,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.buildNamespace("MyClass");
 
@@ -42,7 +42,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.buildNamespace(@"MyFolder\MyClass");
 
@@ -59,7 +59,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.buildNamespace(@"MyFolder\MySubFolder\MyClass");
 
@@ -76,7 +76,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.buildNamespace(@"MyClass");
 
@@ -93,7 +93,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.buildNamespace(@"MyClass");
 
@@ -110,7 +110,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.buildNamespace(@"MySubFolder\MyClass");
 
@@ -127,7 +127,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.buildNamespace(@"MySubSub\MyClass");
 
@@ -144,7 +144,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.buildNamespace(@"..\MyClass");
 
@@ -161,7 +161,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.buildNamespace(@"..\..\MyClass");
 
@@ -178,7 +178,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             sut.Invoking(x => x.buildNamespace(@"..\MyClass")).Should().Throw<NoParentClassException>();
         }
@@ -193,7 +193,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             sut.Invoking(x => x.buildNamespace(@"..\..\MyClass")).Should().Throw<NoParentClassException>();
         }
@@ -210,7 +210,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.getPath("MyClass");
 
@@ -227,7 +227,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.getPath("MyClass");
 
@@ -244,7 +244,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.getPath("MyClass");
 
@@ -261,7 +261,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.getPath("MyFolder\\MyClass");
 
@@ -278,7 +278,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.getPath("MyFolder\\MySubFolder\\MyClass");
 
@@ -295,7 +295,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.getPath("..\\MyClass");
 
@@ -312,7 +312,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.getPath("..\\..\\MyClass");
 
@@ -330,7 +330,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.getFileName("MyClass");
 
@@ -346,7 +346,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.getFileName("MyClass");
 
@@ -362,7 +362,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.getFileName("MyClass");
 
@@ -378,7 +378,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.getFileName("MyFolder\\MyClass");
 
@@ -394,7 +394,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.getFileName("MyFolder\\SubFolder\\MyClass");
 
@@ -410,7 +410,7 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.getFileName("..\\MyClass");
 
@@ -426,12 +426,74 @@ namespace test
             }, basePath);
             var pds = new ProjectDiscoveryService(fs);
 
-            var sut = new BaseGenerator(pds, new ReporterMock());
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
 
             var res = sut.getFileName("..\\..\\MyClass");
 
             res.Should().Be(@"MyClass");
         }
+        #endregion
+
+        #region TypeGeneratorTests
+
+        [Fact]
+        public void TypeClassShouldBeCreated(){
+            string basePath = XFS.Path(@"C:\test");
+            string projPath = XFS.Path(@"C:\test\test.csproj");
+            var fs = new MockFileSystem(new Dictionary<string, MockFileData>{
+                { projPath, MockFileData.NullObject}
+            }, basePath);
+            var pds = new ProjectDiscoveryService(fs);
+
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
+
+            var res = sut.getTypedGenerator(GeneratorType.CLASS);
+
+            res.Should().BeOfType<ClassGenerator>();
+        }
+
+        #endregion
+
+        #region FolderCreationTests
+
+        [Fact]
+        public void CreateFolder()
+        {
+            string basePath = XFS.Path(@"C:\test");
+            string projPath = XFS.Path(@"C:\test\test.csproj");
+            var fs = new MockFileSystem(new Dictionary<string, MockFileData>{
+                { projPath, MockFileData.NullObject}
+            }, basePath);
+            var pds = new ProjectDiscoveryService(fs);
+
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
+
+            var res = sut.getPath("MyFolder\\MyClass");
+            sut.generateFolders(res);
+
+            fs.Directory.Exists(@"C:\test\MyFolder").Should().Be(true);
+            // res.Should().Be(@"C:\test\MyFolder");
+        }
+
+        [Fact]
+        public void CreateFolder2()
+        {
+            string basePath = XFS.Path(@"C:\test");
+            string projPath = XFS.Path(@"C:\test\test.csproj");
+            var fs = new MockFileSystem(new Dictionary<string, MockFileData>{
+                { projPath, MockFileData.NullObject}
+            }, basePath);
+            var pds = new ProjectDiscoveryService(fs);
+
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
+
+            var res = sut.getPath("MyFolder\\MySubFolder\\MyClass");
+            sut.generateFolders(res);
+
+            fs.Directory.Exists(@"C:\test\MyFolder\MySubFolder").Should().Be(true);
+            // res.Should().Be(@"C:\test\MyFolder");
+        }
+
         #endregion
     }
 
