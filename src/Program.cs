@@ -80,7 +80,7 @@ namespace dgen
                 //     return 0;
                 // }
 
-                _generator.GenerateFile(GeneratorType.CLASS, Name);
+                await _generator.GenerateFileAsync(GeneratorType.CLASS, Name);
 
                 return 0;
             }

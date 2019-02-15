@@ -10,6 +10,9 @@ using dgen.Models;
 using dgen.Services;
 using dgen.Extensions;
 using McMaster.Extensions.CommandLineUtils;
+using System.IO;
+using System.Text;
+using System.Threading.Tasks;
 
 [assembly: InternalsVisibleTo("test")]
 namespace dgen.Generators
@@ -34,7 +37,7 @@ namespace dgen.Generators
             _fileSystem = fileSystem;
         }
 
-        public void GenerateFile(GeneratorType genType, string name)
+        public async Task GenerateFileAsync(GeneratorType genType, string name)
         {
             var ns = buildNamespace(name);
             var path = getPath(name);
@@ -46,6 +49,7 @@ namespace dgen.Generators
             var res = generator.Generate(ns, fname);
 
             generateFolders(path);
+            await createFile(path, res);
         }
 
         internal protected string buildNamespace(string name)
@@ -153,6 +157,17 @@ namespace dgen.Generators
             if(!_fileSystem.Directory.Exists(path))
             {
                 _fileSystem.Directory.CreateDirectory(path);
+            }
+        }
+        
+        internal protected async Task createFile(string path, GeneratorResult generatorResult) {
+            var fullName = _fileSystem.Path.Combine(path, generatorResult.FileName);
+
+            if(_fileSystem.File.Exists(fullName)) throw new FileAlreadyExistsException($"The file {fullName} already exist!");
+
+            var buffer = Encoding.ASCII.GetBytes(generatorResult.Content);
+            using(var sw = _fileSystem.FileStream.Create(fullName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None, buffer.Length, true)){
+                await sw.WriteAsync(buffer, 0, buffer.Length);
             }
         }
     }

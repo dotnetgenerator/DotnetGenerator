@@ -495,6 +495,29 @@ namespace test
         }
 
         #endregion
+    
+        #region FileCreationTests
+        [Fact]
+        public void CreateFile()
+        {
+            string basePath = XFS.Path(@"C:\test");
+            string projPath = XFS.Path(@"C:\test\test.csproj");
+            var fs = new MockFileSystem(new Dictionary<string, MockFileData>{
+                { projPath, MockFileData.NullObject}
+            }, basePath);
+            var pds = new ProjectDiscoveryService(fs);
+
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
+
+            // var generator = sut.getTypedGenerator(GeneratorType.CLASS);
+            // var res = generator.Generate(ns, fname);
+            
+            // sut.generateFolders(res);
+            fs.Directory.Exists(@"C:\test\MyFolder").Should().Be(true);
+
+            //sut.createFile()
+        }
+        #endregion
     }
 
 }

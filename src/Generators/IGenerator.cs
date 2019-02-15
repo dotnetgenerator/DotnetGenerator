@@ -1,7 +1,9 @@
 
+using System.Threading.Tasks;
+
 namespace dgen.Generators {
     public interface IGenerator
     {
-        void GenerateFile(GeneratorType genType, string name);
+        Task GenerateFileAsync(GeneratorType genType, string name);
     }
 }
