@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using test.mocks;
 using FluentAssertions;
 using dgen.Exceptions;
+using System.Threading.Tasks;
 
 namespace test
 {
@@ -498,7 +499,7 @@ namespace test
     
         #region FileCreationTests
         [Fact]
-        public void CreateFile()
+        public async Task CreateFile()
         {
             string basePath = XFS.Path(@"C:\test");
             string projPath = XFS.Path(@"C:\test\test.csproj");
@@ -508,14 +509,10 @@ namespace test
             var pds = new ProjectDiscoveryService(fs);
 
             var sut = new BaseGenerator(fs, pds, new ReporterMock());
+            await sut.GenerateFileAsync(GeneratorType.CLASS, "MyFolder\\MyClass");
 
-            // var generator = sut.getTypedGenerator(GeneratorType.CLASS);
-            // var res = generator.Generate(ns, fname);
-            
-            // sut.generateFolders(res);
             fs.Directory.Exists(@"C:\test\MyFolder").Should().Be(true);
-
-            //sut.createFile()
+            fs.FileExists(@"C:\test\MyFolder\MyClass.cs").Should().Be(true);
         }
         #endregion
     }
