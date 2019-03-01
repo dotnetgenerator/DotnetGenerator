@@ -514,6 +514,23 @@ namespace test
             fs.Directory.Exists(@"C:\test\MyFolder").Should().Be(true);
             fs.FileExists(@"C:\test\MyFolder\MyClass.cs").Should().Be(true);
         }
+
+        [Fact]
+        public async Task CreateFile2()
+        {
+            string basePath = XFS.Path(@"C:\test");
+            string projPath = XFS.Path(@"C:\test\test.csproj");
+            var fs = new MockFileSystem(new Dictionary<string, MockFileData>{
+                { projPath, MockFileData.NullObject}
+            }, basePath);
+            var pds = new ProjectDiscoveryService(fs);
+
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
+            await sut.GenerateFileAsync(GeneratorType.CLASS, "MyFolder\\MySubFolder\\MyClass");
+
+            fs.Directory.Exists(@"C:\test\MyFolder").Should().Be(true);
+            fs.FileExists(@"C:\test\MyFolder\MySubFolder\MyClass.cs").Should().Be(true);
+        }
         #endregion
     }
 
