@@ -1,5 +1,5 @@
 # DotnetGenerator
-Tool to generate files in a Dotnet Global Tool
+Tool to generate files in a .Net Global Tool
 
 # Usage
 
