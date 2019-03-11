@@ -17,7 +17,8 @@ using System.Threading.Tasks;
 [assembly: InternalsVisibleTo("test")]
 namespace dgen.Generators
 {
-    public enum GeneratorType {
+    public enum GeneratorType
+    {
         CLASS
     }
 
@@ -43,7 +44,7 @@ namespace dgen.Generators
             var path = getPath(name);
             var fname = getFileName(name);
 
-            if(!IsValidFilename(fname)) throw new InvalidFileName($"The given name ({fname}) is not a valid filename!");
+            if (!IsValidFilename(fname)) throw new InvalidFileName($"The given name ({fname}) is not a valid filename!");
 
             var generator = getTypedGenerator(genType);
             var res = generator.Generate(ns, fname);
@@ -89,9 +90,16 @@ namespace dgen.Generators
                 nsItems.AddRange(items);
             }
 
-            nsItems.Insert(0, rootns);
-
-            ns = string.Join(".", nsItems);
+            if (nsItems.Count != 0)
+            {
+                if(!string.IsNullOrEmpty(rootns)) nsItems.Insert(0, rootns); //Nur den RootNamespace einfügen, wenn er nicht leer ist
+                ns = string.Join(".", nsItems);
+            }
+            else
+            {
+                ns = rootns; //Wenn es keine Namespace items gibt, dann ist der RootNamespace der Namespace
+                ns = String.IsNullOrEmpty(ns) ? name : ns; //Wenn der Namespace immer noch leer ist, den Klassennamen nehmen
+            }
 
             return ns;
         }
@@ -128,12 +136,14 @@ namespace dgen.Generators
             return path;
         }
 
-        internal protected string getFileName(string name){
+        internal protected string getFileName(string name)
+        {
             if (name.Contains(System.IO.Path.DirectorySeparatorChar))
             {
                 var items = name.Split(System.IO.Path.DirectorySeparatorChar).ToList();
                 return items.Last();
-            } else return name;
+            }
+            else return name;
         }
 
         internal protected bool IsValidFilename(string testName)
@@ -147,26 +157,30 @@ namespace dgen.Generators
             return true;
         }
 
-        internal protected ITypeGenerator getTypedGenerator(GeneratorType type){
+        internal protected ITypeGenerator getTypedGenerator(GeneratorType type)
+        {
             var qualifiedName = $"dgen.Generators.{type.ToString().FirstCharToUpper()}Generator";
             var t = Type.GetType(qualifiedName);
             return (ITypeGenerator)Activator.CreateInstance(t);
         }
 
-        internal protected void generateFolders(string path){
-            if(!_fileSystem.Directory.Exists(path))
+        internal protected void generateFolders(string path)
+        {
+            if (!_fileSystem.Directory.Exists(path))
             {
                 _fileSystem.Directory.CreateDirectory(path);
             }
         }
-        
-        internal protected async Task createFile(string path, GeneratorResult generatorResult) {
+
+        internal protected async Task createFile(string path, GeneratorResult generatorResult)
+        {
             var fullName = _fileSystem.Path.Combine(path, generatorResult.FileName);
 
-            if(_fileSystem.File.Exists(fullName)) throw new FileAlreadyExistsException($"The file {fullName} already exist!");
+            if (_fileSystem.File.Exists(fullName)) throw new FileAlreadyExistsException($"The file {fullName} already exist!");
 
             var buffer = Encoding.ASCII.GetBytes(generatorResult.Content);
-            using(var sw = _fileSystem.FileStream.Create(fullName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None, buffer.Length, true)){
+            using (var sw = _fileSystem.FileStream.Create(fullName, FileMode.OpenOrCreate, FileAccess.Write, FileShare.None, buffer.Length, true))
+            {
                 await sw.WriteAsync(buffer, 0, buffer.Length);
             }
         }

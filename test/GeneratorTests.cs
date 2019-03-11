@@ -198,6 +198,32 @@ namespace test
 
             sut.Invoking(x => x.buildNamespace(@"..\..\MyClass")).Should().Throw<NoParentClassException>();
         }
+
+        [Fact]
+        public void NamespaceIsFolderIfNoCsProj(){
+            string basePath = XFS.Path(@"C:\test");
+            var fs = new MockFileSystem(new Dictionary<string, MockFileData>{ 
+                { basePath, new MockDirectoryData()}
+            }, basePath);
+            var pds = new ProjectDiscoveryService(fs);
+
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
+            var res = sut.buildNamespace(@"MyClass");
+
+            res.Should().Be("test");
+        }
+
+        [Fact]
+        public void NamespaceIsClassNameIfEmpty(){
+            string basePath = XFS.Path(@"C:\");
+            var fs = new MockFileSystem(new Dictionary<string, MockFileData>(), basePath);
+            var pds = new ProjectDiscoveryService(fs);
+
+            var sut = new BaseGenerator(fs, pds, new ReporterMock());
+            var res = sut.buildNamespace(@"MyClass");
+
+            res.Should().Be("MyClass");
+        }
         #endregion
 
         #region PathTests

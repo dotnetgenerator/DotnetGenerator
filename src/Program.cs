@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO.Abstractions;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -34,6 +35,7 @@ namespace dgen
 
         static int Main(string[] args)
         {
+            Console.WriteLine(string.Join("-", args));
             using (var services = new ServiceCollection()
                 .AddSingleton<IConsole, PhysicalConsole>()
                 .AddSingleton<IReporter>(provider => new ConsoleReporter(provider.GetService<IConsole>()))
